@@ -47,7 +47,7 @@ export const PoliticianMenu: React.FC<PoliticianMenuProps> = ({
           <div className="flex justify-between items-center">
             <div>
               <h3 className="font-black text-2xl text-gray-800 flex items-center gap-2">
-                <Users className="text-gray-900" /> Select Character
+                <Users className="text-gray-900" /> Select Your Politician
               </h3>
               <p className="text-sm text-gray-500">
                 Choose whose wealth you want to squander.
