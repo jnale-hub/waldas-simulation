@@ -1,73 +1,92 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 💰 Waldas Simulation
 
-Currently, two official plugins are available:
+A satirical, educational simulation that visualizes the immense net worth of Philippine politicians by letting you "shop" with their funds.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> Built with React + Vite, TypeScript and Tailwind CSS. 
 
-## React Compiler
+![Screenshot](public/image.png)
+![Screenshot](public/image1.png)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Table of contents
 
-## Expanding the ESLint configuration
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Project structure](#project-structure)
+- [Customization](#customization)
+- [Contributing](#contributing)
+- [License](#license)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Interactive shopping spree where the budget equals a politician's declared net worth (SALN).
+- Select from dynamic politician profiles; the app theme adapts to the selected profile's colors.
+- Real-time wealth visualization (a "health-bar" style header that depletes as you spend).
+- Societal impact receipt: converts spending into minimum wage labor years and estimates how many families could be fed with rice for a year.
+- Optimized for mobile with responsive grid, sheet-style modals, and touch-friendly controls.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Quick Start
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Prerequisites
+
+- Node.js and npm (or yarn)
+
+Clone and install
+
+```bash
+git clone https://github.com/jnale-hub/waldas-simulation.git
+cd waldas-simulation
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Run dev server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
+# Open http://localhost:5173 in your browser
 ```
+
+Build for production
+
+```bash
+npm run build
+```
+
+## Project structure
+
+Key files and folders:
+
+- `src/`
+  - `App.tsx` — main controller and state management
+  - `main.tsx` — app entry
+  - `index.css` — global styles (Tailwind)
+  - `components/` — reusable UI components
+    - `Header.tsx` — status bar & budget display
+    - `ProductCard.tsx` — item display with counters
+    - `ReceiptModal.tsx` — checkout summary & impact calculation
+    - `CartSummary.tsx` — floating cart bar
+    - `PoliticianMenu.tsx` — character selection grid
+  - `data/constants.ts` — static data: politicians & products
+  - `lib/utils.ts` — helper functions (currency formatting, conversions)
+  - `types.ts` — TypeScript types and interfaces
+
+## Customization
+
+### Adding a new politician
+
+Edit `src/data/constants.ts` and add an entry to the `POLITICIANS` array.
+
+### Adding new products
+
+Add items to the `PRODUCTS` array in `src/data/constants.ts`. Use `category` to mark items as `Pang-masa` (mass-market) or `Luho` (luxury).
+
+## Contributing
+
+Contributions welcome. Suggested workflow:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m "Add feature"`
+4. Push and open a PR
+
+Please keep changes small and document any new data or theme properties.
