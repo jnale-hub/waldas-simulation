@@ -1,7 +1,7 @@
-import React from 'react';
 import { Minus, Plus, ShoppingCart } from 'lucide-react';
-import type { Product, Theme } from '../types';
+import React from 'react';
 import { formatNumber } from '../lib/utils';
+import type { Product, Theme } from '../types';
 
 interface ProductCardProps {
   product: Product;
@@ -20,6 +20,7 @@ const CATEGORY_STYLES: Record<string, string> = {
   'Politika':    'border-red-500 text-red-500 bg-red-50',
 };
 
+// Product card UI
 export const ProductCard = React.memo<ProductCardProps>(({ 
   product, 
   theme, 
@@ -32,13 +33,11 @@ export const ProductCard = React.memo<ProductCardProps>(({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow relative group">
-      {/* Sale Tag */}
       <div className={`absolute top-0 right-0  ${theme.text} ${theme.lightBg} text-[10px] font-bold px-2 py-0.5 rounded-bl-lg z-10 shadow-sm`}>
         {product.category === 'Luho' ? 'MALL' : 'PREFERRED'}
       </div>
 
       <div className="flex p-3 sm:p-4 gap-3 sm:gap-4">
-        {/* Image Area */}
         <div className="w-24 h-24 sm:w-28 sm:h-28 bg-gray-50 rounded-md shrink-0 overflow-hidden relative border border-gray-100">
           {product.image.startsWith('http') ? (
             <img 
@@ -56,10 +55,8 @@ export const ProductCard = React.memo<ProductCardProps>(({
               -{product.discount}%
             </div>
           )}
-        </div>
-        
-        {/* Info Area */}
-        <div className="flex-1 min-w-0 flex flex-col justify-between">
+  </div>
+  <div className="flex-1 min-w-0 flex flex-col justify-between">
           <div>
             <h3 className="font-medium text-gray-900 leading-tight text-sm sm:text-base line-clamp-2 mb-1">
               {product.name}
@@ -87,10 +84,9 @@ export const ProductCard = React.memo<ProductCardProps>(({
             </div>
           </div>
         </div>
-      </div>
+  </div>
 
-      {/* Controls */}
-      <div className="bg-white p-2 sm:p-3 flex items-center justify-end gap-2 border-t border-dashed border-gray-200 min-h-[50px]">
+  <div className="bg-white p-2 sm:p-3 flex items-center justify-end gap-2 border-t border-dashed border-gray-200 min-h-[50px]">
         {qty > 0 ? (
           <div className="flex items-center w-full justify-between sm:justify-end gap-3">
             <div className="flex items-center border border-gray-300 rounded overflow-hidden">
