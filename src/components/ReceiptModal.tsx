@@ -1,7 +1,64 @@
-import React from 'react';
-import { Tag, TrendingUp, X, Wallet } from 'lucide-react';
-import type { Politician, Product } from '../types';
+import { Tag, TrendingUp, Wallet, X } from 'lucide-react';
+import React, { useMemo } from 'react';
 import { formatMoney, formatNumber } from '../lib/utils';
+import type { Politician, Product } from '../types';
+
+type LaborMetric = { days: number; value: string; unit: string };
+type RiceMetric = { days: number; value: string; unit: string; subtext?: string };
+
+const MIN_WAGE_PER_DAY = 695; // NCR daily minimum wage (approx)
+const RICE_PRICE_PER_KG = 54;
+const KG_PER_DAY = 2; // 2kg/day per family
+const RICE_COST_PER_DAY = RICE_PRICE_PER_KG * KG_PER_DAY; // ₱108/day
+
+function computeLaborMetric(total: number): LaborMetric {
+  const days = Math.floor(total / MIN_WAGE_PER_DAY);
+  if (days <= 0) return { days: 0, value: '0', unit: 'Days' };
+
+  if (days < 30) {
+    return { days, value: days.toLocaleString(), unit: days === 1 ? 'Day' : 'Days' };
+  }
+
+  if (days < 365) {
+    const months = parseFloat((days / 30).toFixed(1));
+    return { days, value: months.toLocaleString(), unit: 'Months' };
+  }
+
+  const years = parseFloat((days / 365).toFixed(1));
+  return { days, value: years.toLocaleString(), unit: 'Years' };
+}
+
+function computeRiceMetric(total: number): RiceMetric {
+  const days = Math.floor(total / RICE_COST_PER_DAY);
+  if (days <= 0) return { days: 0, value: '0', unit: 'Days of Rice', subtext: '' };
+
+  if (days < 30) {
+    return {
+      days,
+      value: days.toLocaleString(),
+      unit: days === 1 ? 'Day of Rice' : 'Days of Rice',
+      subtext: 'Could provide 2kg of rice daily for a family for this duration.'
+    };
+  }
+
+  if (days < 365) {
+    const months = parseFloat((days / 30).toFixed(1));
+    return {
+      days,
+      value: months.toLocaleString(),
+      unit: 'Months of Rice',
+      subtext: 'Could provide 2kg of rice daily for a family for this duration.'
+    };
+  }
+
+  const familiesForYear = Math.floor(days / 365);
+  return {
+    days,
+    value: familiesForYear.toLocaleString(),
+    unit: familiesForYear === 1 ? 'Family Fed' : 'Families Fed',
+    subtext: 'Could provide daily rice (2kg) for this many families for an entire year.'
+  };
+}
 
 interface ReceiptModalProps {
   show: boolean;
@@ -22,27 +79,30 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   totalSpent,
   orderId
 }) => {
-  if (!show) return null;
-
   const { theme } = politician;
-  
-  // Calculate impact metrics
-  // Using 695 (NCR Daily Minimum Wage)
-  const minWageDays = Math.floor(totalSpent / 695); 
-  const minWageYears = minWageDays / 365;
-  
-  // Rice: 54/kg * 2kg/day * 365 days = ~39,420 per family per year
-  const riceFamilies = Math.floor(totalSpent / (54 * 365 * 2)); 
 
-  // Only show report if the impact is significant (e.g., more than 1 month of labor)
-  const hasImpact = minWageDays > 30 || riceFamilies >= 1;
+  const { labor, rice, hasImpact } = useMemo(() => {
+    if (totalSpent <= 0) {
+      return {
+        labor: { days: 0, value: '0', unit: 'Days' },
+        rice: { days: 0, value: '0', unit: 'Days of Rice', subtext: '' },
+        hasImpact: false
+      };
+    }
+
+    const labor = computeLaborMetric(totalSpent);
+    const rice = computeRiceMetric(totalSpent);
+    return { labor, rice, hasImpact: rice.days >= 1 };
+  }, [totalSpent]);
+
+  // Keep the early return below hooks so rules-of-hooks remain satisfied
+  if (!show) return null;
 
   return (
     <div className="fixed inset-0 z-60 bg-white md:bg-slate-900/95 overflow-hidden backdrop-blur-sm animate-in fade-in duration-200 flex items-center justify-center p-0 md:p-4">
-      {/* Added md:max-h-[85vh] to prevent overflowing on large screens */}
       <div className="w-full h-full md:h-auto md:max-h-[85vh] md:max-w-lg bg-white md:rounded-xl shadow-2xl relative flex flex-col overflow-hidden">
         
-        {/* Header */}
+        
         <div className={`bg-linear-to-r ${theme.gradient} text-white p-5 relative overflow-hidden shrink-0 transition-colors duration-500`}>
           <div className="absolute -right-4 -top-4 text-9xl opacity-10 rotate-12 select-none">🧾</div>
           
@@ -73,10 +133,8 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           </div>
         </div>
 
-        {/* Body - content scrolls inside this container */}
+        
         <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-gray-50">
-          
-          {/* Receipt Items */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-4">
             <div className="text-[10px] font-bold text-gray-400 mb-3 uppercase tracking-wider border-b border-gray-100 pb-2">Purchase Summary</div>
             <div className="space-y-4">
@@ -103,27 +161,26 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 );
               })}
             </div>
-            
-            {/* Total */}
+
             <div className="flex justify-between items-center py-4 border-t border-dashed border-gray-200 mt-4 bg-white sticky bottom-0">
               <span className="font-bold text-base text-gray-600">Total Spent</span>
               <span className={`font-black text-xl ${theme.text}`}>{formatMoney(totalSpent)}</span>
             </div>
           </div>
 
-          {/* Conditional Impact Report */}
+          
           {hasImpact ? (
             <div className={`${theme.lightBg} ${theme.border} border rounded-xl p-5 space-y-4 animate-in slide-in-from-bottom-2 duration-500`}>
               <h3 className={`text-xs font-black uppercase ${theme.text} tracking-wider flex items-center gap-2`}>
                 <TrendingUp size={16} /> Societal Impact Report
               </h3>
               
-              {minWageYears > 0.08 && (
+              {labor.days > 0 && (
                 <div className="flex gap-4 items-start">
                   <div className="bg-white p-2.5 rounded-lg shadow-sm text-2xl border border-gray-100">👷</div>
                   <div>
                     <div className="font-bold text-gray-800 text-sm">
-                      {parseFloat(minWageYears.toFixed(1)).toLocaleString()} Years of Labor
+                      {labor.value} {labor.unit} of Labor
                     </div>
                     <p className="text-xs text-gray-600 leading-relaxed mt-1">
                       Equivalent to a minimum wage earner's full salary (₱695/day) for this duration.
@@ -132,13 +189,13 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 </div>
               )}
 
-              {riceFamilies > 0 && (
+              {rice.days > 0 && (
                   <div className="flex gap-4 items-start">
                   <div className="bg-white p-2.5 rounded-lg shadow-sm text-2xl border border-gray-100">🍚</div>
                   <div>
-                    <div className="font-bold text-gray-800 text-sm">{formatNumber(riceFamilies)} Families Fed</div>
+                    <div className="font-bold text-gray-800 text-sm">{rice.value} {rice.unit}</div>
                     <p className="text-xs text-gray-600 leading-relaxed mt-1">
-                      Could provide rice (2kg/day) for this many families for an entire year.
+                      {rice.subtext}
                     </p>
                   </div>
                 </div>
@@ -157,7 +214,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <div className="h-4"></div>
         </div>
 
-        {/* Footer */}
+        
         <div className="p-4 bg-white border-t border-gray-100 md:rounded-b-xl shrink-0 z-20">
           <button 
             onClick={onClose}
