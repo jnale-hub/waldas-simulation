@@ -55,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
         >
            {/* Big Avatar - The Focus */}
            <div className="relative shrink-0">
-             <div className="w-16 h-16 rounded-full border-2 border-white/30 shadow-2xl overflow-hidden bg-gray-800 relative z-10 group-hover:border-white/50 transition-colors">
+             <div className="w-16 h-16 sm:size-24 rounded-full border-2 border-white/30 shadow-2xl overflow-hidden bg-gray-800 relative z-10 group-hover:border-white/50 transition-colors">
                 <img 
                   src={politician.image} 
                   alt={politician.name} 
