@@ -95,10 +95,6 @@ export const PoliticianMenu: React.FC<PoliticianMenuProps> = ({
                     : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-1"
                 }`}
               >
-                {/* Theme Gradient Accent Strip */}
-                <div
-                  className={`absolute left-0 top-0 bottom-0 w-1.5 bg-linear-to-b ${pol.theme.gradient}`}
-                ></div>
 
                 {/* Avatar Image */}
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-gray-100 shrink-0 bg-gray-200 shadow-sm group-hover:scale-105 transition-transform relative">
