@@ -1,11 +1,12 @@
-import { useState, useMemo, useCallback } from 'react';
+// Main application component
+import { useCallback, useMemo, useState } from 'react';
+import { CartSummary } from './components/CartSummary';
+import { Header } from './components/Header';
+import { PoliticianMenu } from './components/PoliticianMenu';
+import { ProductCard } from './components/ProductCard';
+import { ReceiptModal } from './components/ReceiptModal';
 import { POLITICIANS, PRODUCTS } from './data/constants';
 import type { Politician } from './types';
-import { Header } from './components/Header';
-import { ProductCard } from './components/ProductCard';
-import { CartSummary } from './components/CartSummary';
-import { ReceiptModal } from './components/ReceiptModal';
-import { PoliticianMenu } from './components/PoliticianMenu';
 
 export default function App() {
   const [selectedPolitician, setSelectedPolitician] = useState<Politician>(POLITICIANS[0]);
@@ -25,7 +26,7 @@ export default function App() {
 
   const balance = selectedPolitician.netWorth - totalSpent;
 
-  // Handlers (Memoized to prevent unnecessary prop updates)
+  // Handlers (memoized)
   const addToCart = useCallback((productId: string, qty: number = 1) => {
     setCart(prev => {
       const current = prev[productId] || 0;
