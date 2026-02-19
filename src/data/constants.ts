@@ -190,7 +190,7 @@ export const POLITICIANS: Politician[] = [
     name: 'Win Gatchalian',
     title: 'Senator',
     netWorth: 89500000,
-    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Senator_Win_Gatchalian_in_2025.png',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/Win_Gatchalian%2C_Senate_portrait_2025.png',
     theme: {
       gradient: 'from-emerald-500 to-emerald-700',
       button: 'bg-emerald-500',
@@ -306,7 +306,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'sardines',
     name: 'Canned Sardines',
-    price: 24,
+    price: 25,
     category: 'Pagkain',
     image: 'https://cosmocashcarry.com/wp-content/uploads/2023/09/Mega-Sardines-Chilli-Red-155g.jpg',
     desc: 'Ang pambansang ulam pag gipit.',
@@ -316,7 +316,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'pancit',
     name: 'Instant Pancit Canton',
-    price: 16,
+    price: 18,
     category: 'Pagkain',
     image: 'https://smmarkets.ph/media/catalog/product/2/0/20351788_1.png',
     desc: 'Calamansi flavor. Pagkain ng estudyante.',
@@ -326,7 +326,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'rice',
     name: '1kg Well-Milled Rice',
-    price: 54,
+    price: 56,
     category: 'Pagkain',
     image: 'https://www.ibuypacific.com/media/catalog/product/cache/image/600x600/e9c3970ab036de70892d86c6d221abfe/f/o/food_rice_1kg_2.80_1.jpg',
     desc: 'Sinandomeng. Kanin is life.',
@@ -346,7 +346,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'sibuyas',
     name: 'Red Onions (1 Kilo)',
-    price: 180,
+    price: 150,
     category: 'Pagkain',
     image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=800&q=80',
     desc: 'Essential sa gisa. Minsan ginto.',
